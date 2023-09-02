@@ -3,7 +3,7 @@ const postsController = {
 
     getAll: async (req, res) => {
         try {
-            const [rows, fields] = await pool.query("select * from api_data")
+            const [rows, fields] = await pool.query("select * from API_Data")
             res.json({
                 data: rows
             })
@@ -14,7 +14,7 @@ const postsController = {
     getById: async (req, res) => {
         try {
             const { id } = req.params
-            const [rows, fields] = await pool.query("select * from api_data where T_ID = ?", [id])
+            const [rows, fields] = await pool.query("select * from API_Data where T_ID = ?", [id])
             res.json({
                 data: rows
             })
