@@ -1,6 +1,6 @@
-const pool = require("../database/index")
-const postsController = {
+const pool = require("../database/index");
 
+const postsController = {
     getAll: async (req, res) => {
         try {
             const [rows, fields] = await pool.query("select * from API_Data")
@@ -13,15 +13,34 @@ const postsController = {
     },
     getById: async (req, res) => {
         try {
-            const { id } = req.params
-            const [rows, fields] = await pool.query("select * from API_Data where T_ID = ?", [id])
-            res.json({
-                data: rows
-            })
-        } catch (error) {
+            const { location } = req.params
+            let query = "SELECT * FROM API_Data where WB_Location_ID = ?";
+            const params = [];
+            params.push(location)
+            if (req.query.TRNo) {
+                query += " AND TRNo = ?";
+                params.push(req.query.TRNo);
+            }
+            if (req.query.VehicleNo) {
+                query += " AND VehicleNo = ?";
+                params.push(req.query.VehicleNo);
+            }
+            console.log(query,params)
+            const [rows, fields] = await pool.query(query, params);
 
+            const formattedResult = [];
+
+            for (const item of rows) {
+              const { T_ID, WB_Location_ID, ...rest } = item;
+              formattedResult.push(rest);
+            }
+            res.json(formattedResult)
+        } catch (error) {
+            console.log(error)
         }
     }
-}
 
-module.exports = postsController
+
+};
+
+module.exports = postsController;
