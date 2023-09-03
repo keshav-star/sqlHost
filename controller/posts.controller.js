@@ -14,8 +14,8 @@ const postsController = {
                 }
                 formattedResult.push(formattedItem);
             }
-            
-            res.json(   )
+
+            res.json(formattedResult)
         } catch (error) {
             console.log(error)
         }
@@ -26,13 +26,15 @@ const postsController = {
             let query = "SELECT * FROM weighing_api where WB_Location_ID = ?";
             const params = [];
             params.push(location)
-            if (req.query.TRNo) {
-                query += " AND TRNo = ?";
-                params.push(req.query.TRNo);
-            }
-            if (req.query.VehicleNo) {
+
+            if (req.query.vehno) {
                 query += " AND VehicleNo = ?";
-                params.push(req.query.VehicleNo);
+                params.push(req.query.vehno);
+            }
+
+            if (req.query.trno) {
+                query += " AND TRNo = ?";
+                params.push(req.query.trno);
             }
             // console.log(query, params)
             const [rows, fields] = await pool.query(query, params);
